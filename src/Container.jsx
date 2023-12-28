@@ -1,61 +1,56 @@
 function Container() {
   return (
-    <nav className='panel'>
-      <div className='panel-block'>
-        <p className='control has-icons-left'>
-          <input
-            className='input'
-            type='text'
-            placeholder='Search'
-          />
-          <span className='icon is-left'>
+    <div className='dropdown is-active'>
+      <div className='dropdown-trigger'>
+        <button
+          className='button'
+          aria-haspopup='true'
+          aria-controls='dropdown-menu'
+        >
+          <span>Dropdown button</span>
+          <span className='icon is-small'>
             <i
-              className='fas fa-search'
+              className='fas fa-angle-down'
               aria-hidden='true'
             ></i>
           </span>
-        </p>
+        </button>
       </div>
-
-      <a className='panel-block is-active'>
-        <span className='panel-icon'>
-          <ion-icon
-            className='fas fa-book'
-            name='home-outline'
-            aria-hidden='true'
-          ></ion-icon>
-          {/* <i></i> */}
-        </span>
-        bulma
-      </a>
-      <a className='panel-block'>
-        <span className='panel-icon'>
-          <i
-            className='fas fa-book'
-            aria-hidden='true'
-          ></i>
-        </span>
-        marksheet
-      </a>
-      <a className='panel-block'>
-        <span className='panel-icon'>
-          <i
-            className='fas fa-book'
-            aria-hidden='true'
-          ></i>
-        </span>
-        minireset.css
-      </a>
-      <a className='panel-block'>
-        <span className='panel-icon'>
-          <i
-            className='fas fa-book'
-            aria-hidden='true'
-          ></i>
-        </span>
-        jgthms.github.io
-      </a>
-    </nav>
+      <div
+        className='dropdown-menu'
+        id='dropdown-menu'
+        role='menu'
+      >
+        <div className='dropdown-content'>
+          <a
+            href='#'
+            className='dropdown-item'
+          >
+            Dropdown item
+          </a>
+          <a className='dropdown-item'>Other dropdown item</a>
+          <a
+            href='#'
+            className='dropdown-item is-active'
+          >
+            Active dropdown item
+          </a>
+          <a
+            href='#'
+            className='dropdown-item'
+          >
+            Other dropdown item
+          </a>
+          <hr className='dropdown-divider' />
+          <a
+            href='#'
+            className='dropdown-item'
+          >
+            With a divider
+          </a>
+        </div>
+      </div>
+    </div>
   );
 }
 

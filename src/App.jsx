@@ -1,5 +1,5 @@
 import 'bulma/css/bulma.min.css';
-import Dropdown, { DropdownMenu, DropdownTrigger } from './Dropdown';
+import Dropdown, { DropdownOptions, DropdownSelect } from './Dropdown';
 import Container from './Container';
 
 function App() {
@@ -13,8 +13,8 @@ function App() {
   return (
     <>
       <Dropdown>
-        <DropdownTrigger />
-        <DropdownMenu itemlist={itemList} />
+        <DropdownSelect id='country' />
+        <DropdownOptions itemlist={itemList} />
       </Dropdown>
       <Container />
     </>

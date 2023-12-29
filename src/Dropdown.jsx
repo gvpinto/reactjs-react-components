@@ -1,24 +1,36 @@
-import { useContext, useRef } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import { createContext } from 'react';
 import { useState } from 'react';
 import { FaSearch, FaAngleDown } from 'react-icons/fa';
 import { useImmer } from 'use-immer';
 import useClickOutside from './useClickOutside';
+import { useEscape } from './useEscape';
 // import { useImmer } from 'use-immer';
 // import { useImmerReducer } from 'use-immer';
 
 const DropdownContext = createContext(null);
 
 function Dropdown({ children }) {
-  const [showMenu, setShowMenu] = useImmer(false);
-  const [selectedItem, setSelectedItem] = useImmer(() => ({
+  const [showMenu, setShowMenu] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(() => ({
     value: '',
     name: '',
   }));
+
+  const [filter, setFilter] = useState('');
+
   const isActive = showMenu ? 'is-active' : '';
+
   return (
     <DropdownContext.Provider
-      value={{ showMenu, setShowMenu, selectedItem, setSelectedItem }}
+      value={{
+        showMenu,
+        setShowMenu,
+        selectedItem,
+        setSelectedItem,
+        filter,
+        setFilter,
+      }}
     >
       <div
         className={`dropdown ${isActive}`}
@@ -30,25 +42,51 @@ function Dropdown({ children }) {
   );
 }
 
-function DropdownTrigger({ children }) {
-  const { setShowMenu, selectedItem } = useContext(DropdownContext);
+function DropdownSelect({ children, id }) {
+  //   console.log('Rendering DropdownSelect');
+  const { setShowMenu, selectedItem, setSelectedItem, setFilter } =
+    useContext(DropdownContext);
 
-  function handleOnFocus(e) {
+  const [searchValue, setSearchValue] = useState('');
+
+  useEffect(() => {
+    setSearchValue(() => selectedItem.name);
+  }, [setSearchValue, selectedItem]);
+
+  function handleOnClick(e) {
     e.target.select();
+    setFilter(() => '');
     setShowMenu(true);
+  }
+
+  function handleOnChange(e) {
+    setFilter(() => e.target.value);
+    setSearchValue(() => e.target.value);
+    // e.stopPropogation();
   }
 
   return (
     <div className='dropdown-trigger'>
       <p className='control has-icons-right'>
         <input
+          name={`${id}-display`}
+          id={`${id}-display`}
           className='input'
           type='text'
           placeholder='Select or Search'
           aria-haspopup='true'
           aria-controls='dropdown-menu'
-          defaultValue={selectedItem.name}
-          onFocus={handleOnFocus}
+          value={searchValue}
+          onClick={handleOnClick}
+          onChange={handleOnChange}
+          //   onBlur={() => setShowMenu(() => false)}
+        />
+        <input
+          name={id}
+          id={id}
+          className='input'
+          type='hidden'
+          value={selectedItem.value}
           //   onBlur={() => setShowMenu(() => false)}
         />
         <span className='icon is-right'>
@@ -59,34 +97,51 @@ function DropdownTrigger({ children }) {
   );
 }
 
-function DropdownMenu({ children, itemlist }) {
-  const { selectedItem, setSelectedItem, setShowMenu } =
+function DropdownOptions({ children, itemlist }) {
+  //   console.log('Rendering DropdownOptions');
+  const { selectedItem, setSelectedItem, setShowMenu, filter } =
     useContext(DropdownContext);
 
   // Handle Outside Click
   const menuRef = useRef(null);
+
   useClickOutside(menuRef, () => {
     setShowMenu(false);
   });
 
-  console.log(`[${selectedItem}]`);
-  const dropdownList = itemlist.map((item) => {
-    const isSelected = item.value === selectedItem.value ? 'is-active' : '';
-    function handleSelect() {
-      setSelectedItem({ value: item.value, name: item.name });
-      setShowMenu(false);
-    }
-    return (
-      <a
-        href='#'
-        key={item.value}
-        className={`dropdown-item ${isSelected}`}
-        onClick={handleSelect}
-      >
-        {item.name}
-      </a>
-    );
-  });
+  useEscape(
+    useRef,
+    useCallback(
+      (e) => {
+        setShowMenu(false);
+      },
+      [setShowMenu],
+    ),
+  );
+
+  function handleSelect({ value, name }) {
+    // TODO: Remove
+    console.log(`${value}: ${name}`);
+    setSelectedItem(() => ({ value, name }));
+    setShowMenu(false);
+  }
+
+  const dropdownList = itemlist
+    .filter((item) => item.name.toLowerCase().includes(filter.toLowerCase()))
+    .map((item) => {
+      const isSelected = item.value === selectedItem.value ? 'is-active' : '';
+
+      return (
+        <a
+          href='#'
+          key={item.value}
+          className={`dropdown-item ${isSelected}`}
+          onClick={() => handleSelect(item)}
+        >
+          {item.name}
+        </a>
+      );
+    });
 
   return (
     <div
@@ -101,4 +156,4 @@ function DropdownMenu({ children, itemlist }) {
 }
 
 export default Dropdown;
-export { DropdownMenu, DropdownTrigger };
+export { DropdownOptions, DropdownSelect };

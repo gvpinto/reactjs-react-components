@@ -1,8 +1,7 @@
+import { useState } from 'react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { createContext } from 'react';
-import { useState } from 'react';
-import { FaSearch, FaAngleDown } from 'react-icons/fa';
-import { useImmer } from 'use-immer';
+import { FaAngleDown } from 'react-icons/fa';
 import useClickOutside from './useClickOutside';
 import { useEscape } from './useEscape';
 // import { useImmer } from 'use-immer';
@@ -10,7 +9,7 @@ import { useEscape } from './useEscape';
 
 const DropdownContext = createContext(null);
 
-function Dropdown({ children }) {
+function Dropdown({ children, id }) {
   const [showMenu, setShowMenu] = useState(false);
   const [selectedItem, setSelectedItem] = useState(() => ({
     value: '',
@@ -30,6 +29,7 @@ function Dropdown({ children }) {
         setSelectedItem,
         filter,
         setFilter,
+        id,
       }}
     >
       <div
@@ -42,9 +42,9 @@ function Dropdown({ children }) {
   );
 }
 
-function DropdownSelect({ children, id }) {
+function DropdownSelect() {
   //   console.log('Rendering DropdownSelect');
-  const { setShowMenu, selectedItem, setSelectedItem, setFilter } =
+  const { setShowMenu, selectedItem, setFilter, id } =
     useContext(DropdownContext);
 
   const [searchValue, setSearchValue] = useState('');
@@ -97,7 +97,7 @@ function DropdownSelect({ children, id }) {
   );
 }
 
-function DropdownOptions({ children, itemlist }) {
+function DropdownOptions({ itemlist }) {
   //   console.log('Rendering DropdownOptions');
   const { selectedItem, setSelectedItem, setShowMenu, filter } =
     useContext(DropdownContext);
@@ -120,8 +120,6 @@ function DropdownOptions({ children, itemlist }) {
   );
 
   function handleSelect({ value, name }) {
-    // TODO: Remove
-    console.log(`${value}: ${name}`);
     setSelectedItem(() => ({ value, name }));
     setShowMenu(false);
   }

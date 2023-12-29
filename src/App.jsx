@@ -27,7 +27,7 @@ function App() {
   ];
   return (
     <>
-      <Dropdown>
+      <Dropdown id='country'>
         <DropdownSelect id='country' />
         <DropdownOptions itemlist={itemList} />
       </Dropdown>

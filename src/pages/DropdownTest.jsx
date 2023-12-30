@@ -1,18 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
-
 import { getCountries } from '../api/countriesApi';
+import {
+  selectAppState,
+  updateSelectedCountry,
+  updateSelectedState,
+} from '../store/slices/appSlice';
 
 import Dropdown, {
   DropdownOptions,
   DropdownSelect,
 } from '../components/Dropdown';
-import { AppConstants, useAppDispatch } from '../ contexts/AppContext';
 
+// ALT
+// import { AppConstants, useAppDispatch } from '../ contexts/AppContext';
+
+/**
+ * Main Function
+ * @returns
+ */
 function DropdownTest() {
-  //   const [selectedItem, setSelectedItem] = useState(null);
+  // ALT
+  //   const dispatch = useAppDispatch();
+  const { selectedCountry } = useSelector(selectAppState);
+  console.log(`selectedCountry: ${selectedCountry}`);
 
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
   const { isPending, error, data, isFetching } = useQuery({
     queryKey: ['countries'],
@@ -54,10 +67,13 @@ function DropdownTest() {
   //   ];
 
   function updateSelectedItem(selectedItem) {
-    dispatch({
-      type: AppConstants.UPDATE_SELECTED_COUNTRY,
-      payload: selectedItem,
-    });
+    // ALT:
+    // dispatch({
+    //   type: AppConstants.UPDATE_SELECTED_COUNTRY,
+    //   payload: selectedItem,
+    // });
+
+    dispatch(updateSelectedCountry(selectedItem));
   }
 
   return (

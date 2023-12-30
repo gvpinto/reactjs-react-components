@@ -23,11 +23,16 @@ function DropdownTest() {
   // ALT
   //   const dispatch = useAppDispatch();
   const { selectedCountry } = useSelector(selectAppState);
-  console.log(`selectedCountry: ${selectedCountry}`);
+  console.log('selectedCountry: ', selectedCountry);
 
   const dispatch = useDispatch();
 
-  const { isPending, error, data, isFetching } = useQuery({
+  const {
+    isPending,
+    error,
+    data: countries,
+    isFetching,
+  } = useQuery({
     queryKey: ['countries'],
     queryFn: getCountries,
   });
@@ -36,12 +41,13 @@ function DropdownTest() {
 
   if (error) return 'An error has occurred: ' + error.message;
 
-  console.log(data);
+  //   console.log(countries);
 
-  const countriesList = data.map((country) => ({
-    value: country.code,
-    name: country.value,
-  }));
+  //   const countriesList = data.map((country) => ({
+  //     id: country.id,
+  //     key: country.key,
+  //     value: country.value,
+  //   }));
 
   //   const itemList = [
   //     { value: 'one', name: 'one Item' },
@@ -83,7 +89,7 @@ function DropdownTest() {
         getSelectedItem={updateSelectedItem}
       >
         <DropdownSelect id='country' />
-        <DropdownOptions itemlist={countriesList} />
+        <DropdownOptions items={countries} />
       </Dropdown>
     </>
   );

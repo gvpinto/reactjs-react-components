@@ -9,18 +9,20 @@ import { useEscape } from '../hooks/useEscape';
 
 const DropdownContext = createContext(null);
 
+/**
+ * Parent Component Tag
+ * @param {children, id, getSelectedItem} param0
+ * @returns
+ */
 function Dropdown({ children, id, getSelectedItem }) {
   const [showMenu, setShowMenu] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(() => ({
-    value: '',
-    name: '',
-  }));
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     if (getSelectedItem) getSelectedItem(selectedItem);
   }, [getSelectedItem, selectedItem]);
 
-  const [filter, setFilter] = useState('');
+  const [searchFilter, setSearchFilter] = useState('');
 
   const isActive = showMenu ? 'is-active' : '';
 
@@ -31,8 +33,8 @@ function Dropdown({ children, id, getSelectedItem }) {
         setShowMenu,
         selectedItem,
         setSelectedItem,
-        filter,
-        setFilter,
+        searchFilter,
+        setSearchFilter,
         id,
       }}
     >
@@ -48,28 +50,29 @@ function Dropdown({ children, id, getSelectedItem }) {
 
 /**
  * This function renders the Select input box
- * @returns
+ * @returns UI
  */
 
 function DropdownSelect() {
   //   console.log('Rendering DropdownSelect');
-  const { setShowMenu, selectedItem, setFilter, id } =
+  const { setShowMenu, selectedItem, setSearchFilter, searchFilter, id } =
     useContext(DropdownContext);
 
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
-    setSearchValue(() => selectedItem.name);
-  }, [setSearchValue, selectedItem]);
+    setSearchValue(() => selectedItem?.value ?? '');
+    // setSearchFilter(() => selectedItem?.value ?? '');
+  }, [selectedItem]);
 
   function handleOnClick(e) {
     e.target.select();
-    setFilter(() => '');
+    setSearchFilter(() => '');
     setShowMenu(true);
   }
 
   function handleOnChange(e) {
-    setFilter(() => e.target.value);
+    setSearchFilter(() => e.target.value);
     setSearchValue(() => e.target.value);
     // e.stopPropogation();
   }
@@ -86,6 +89,7 @@ function DropdownSelect() {
           aria-haspopup='true'
           aria-controls='dropdown-menu'
           value={searchValue}
+          //   value={searchFilter}
           onClick={handleOnClick}
           onChange={handleOnChange}
           //   onBlur={() => setShowMenu(() => false)}
@@ -95,7 +99,7 @@ function DropdownSelect() {
           id={id}
           className='input'
           type='hidden'
-          value={selectedItem.value}
+          value={selectedItem?.value ?? ''}
           //   onBlur={() => setShowMenu(() => false)}
         />
         <span className='icon is-right'>
@@ -107,22 +111,25 @@ function DropdownSelect() {
 }
 
 /**
- *
- * @param {itemlist} item list to be displayed
+ * DropdownOptions - Is the Dropdown list box
+ * @param {items} item list to be displayed
  * @returns
  */
-function DropdownOptions({ itemlist }) {
+function DropdownOptions({ items }) {
   //   console.log('Rendering DropdownOptions');
-  const { selectedItem, setSelectedItem, setShowMenu, filter } =
+
+  const { selectedItem, setSelectedItem, setShowMenu, searchFilter } =
     useContext(DropdownContext);
 
   // Handle Outside Click
   const menuRef = useRef(null);
 
+  // Handle click outside of the Dropdown control to close the dropdown box
   useClickOutside(menuRef, () => {
     setShowMenu(false);
   });
 
+  // Handle Escape key to close the dropdown box
   useEscape(
     useRef,
     useCallback(
@@ -133,28 +140,32 @@ function DropdownOptions({ itemlist }) {
     ),
   );
 
-  function handleSelect({ value, name }) {
-    setSelectedItem(() => ({ value, name }));
+  function handleSelect({ id, value }) {
+    setSelectedItem(() => ({ id, value }));
     setShowMenu(false);
   }
 
-  const dropdownList = itemlist
-    .filter((item) => item.name.toLowerCase().includes(filter.toLowerCase()))
+  let dropdownList;
+
+  dropdownList = items
+    .filter((item) =>
+      item.value.toLowerCase().includes(searchFilter.toLowerCase()),
+    )
     .map((item) => {
-      const isSelected = item.value === selectedItem.value ? 'is-active' : '';
+      const isSelected = item.key === selectedItem?.id ? 'is-active' : '';
 
       return (
         <a
           href='#'
-          key={item.value}
+          key={item.id}
           className={`dropdown-item ${isSelected}`}
           onClick={() => handleSelect(item)}
         >
-          {item.name}
+          {item.value}
         </a>
       );
     });
-
+  console.log('Dropdown list: ', dropdownList.length);
   return (
     <div
       className='dropdown-menu'

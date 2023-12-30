@@ -4,31 +4,97 @@ import { faker } from '@faker-js/faker';
 
 function createRandomCountries() {
   return {
-    code: faker.location.countryCode('alpha-2'),
+    key: faker.location.countryCode('alpha-2'),
     value: faker.location.country(),
   };
 }
 
 function createRandomStates() {
   return {
-    code: faker.location.state({ abbreviated: true }),
+    key: faker.location.state({ abbreviated: true }),
     value: faker.location.state(),
   };
 }
 
 const countryList = faker.helpers.multiple(createRandomCountries, {
-  count: 10,
+  count: 20,
 });
 
-const countries = {
+let i = 1;
+
+let db = {};
+
+// const countries = {
+//   countries: countryList.map((country) => {
+//     let j = 1;
+//     const states = faker.helpers.multiple(createRandomStates, {
+//       count: 10,
+//     });
+//     return {
+//       id: i++,
+//       ...country,
+//       states: states.map((state) => {
+//         return {
+//           id: j++,
+//           ...state,
+//         };
+//       }),
+//     };
+//   }),
+// };
+
+db = {
   countries: countryList.map((country) => {
+    // let j = 1;
+    // const states = faker.helpers.multiple(createRandomStates, {
+    //   count: 10,
+    // });
     return {
+      id: i++,
       ...country,
-      states: faker.helpers.multiple(createRandomStates, {
-        count: 10,
-      }),
+      //   states: states.map((state) => {
+      //     return {
+      //       id: j++,
+      //       ...state,
+      //     };
+      //   }),
     };
   }),
 };
 
-console.log(JSON.stringify(countries));
+// const finalStates = [];
+
+// let j = 1;
+// db.states = db.countries.map((country) => {
+//   const states = faker.helpers
+//     .multiple(createRandomStates, {
+//       count: 10,
+//     })
+//     .map((state) => {
+//       return {
+//         id: j++,
+//         countryId: country.id,
+//         ...state,
+//       };
+//     });
+//   return states;
+// });
+
+db.states = [];
+let j = 1;
+db.countries.forEach((country) => {
+  const states = faker.helpers
+    .multiple(createRandomStates, {
+      count: 10,
+    })
+    .map((state) => {
+      return {
+        id: j++,
+        countryId: country.id,
+        ...state,
+      };
+    });
+  db.states.push(...states);
+});
+
+console.log(JSON.stringify(db));

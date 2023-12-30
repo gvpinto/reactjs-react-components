@@ -7,3 +7,9 @@
 /* .control .icon {
   right: 0em;
 } */
+
+.container {
+  width: 1300px;
+  margin: 10px auto;
+  text-align: center;
+}

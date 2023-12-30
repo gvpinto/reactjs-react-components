@@ -2,19 +2,23 @@ import { useState } from 'react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { createContext } from 'react';
 import { FaAngleDown } from 'react-icons/fa';
-import useClickOutside from './useClickOutside';
-import { useEscape } from './useEscape';
+import useClickOutside from '../hooks/useClickOutside';
+import { useEscape } from '../hooks/useEscape';
 // import { useImmer } from 'use-immer';
 // import { useImmerReducer } from 'use-immer';
 
 const DropdownContext = createContext(null);
 
-function Dropdown({ children, id }) {
+function Dropdown({ children, id, getSelectedItem }) {
   const [showMenu, setShowMenu] = useState(false);
   const [selectedItem, setSelectedItem] = useState(() => ({
     value: '',
     name: '',
   }));
+
+  useEffect(() => {
+    if (getSelectedItem) getSelectedItem(selectedItem);
+  }, [getSelectedItem, selectedItem]);
 
   const [filter, setFilter] = useState('');
 
@@ -41,6 +45,11 @@ function Dropdown({ children, id }) {
     </DropdownContext.Provider>
   );
 }
+
+/**
+ * This function renders the Select input box
+ * @returns
+ */
 
 function DropdownSelect() {
   //   console.log('Rendering DropdownSelect');
@@ -97,6 +106,11 @@ function DropdownSelect() {
   );
 }
 
+/**
+ *
+ * @param {itemlist} item list to be displayed
+ * @returns
+ */
 function DropdownOptions({ itemlist }) {
   //   console.log('Rendering DropdownOptions');
   const { selectedItem, setSelectedItem, setShowMenu, filter } =

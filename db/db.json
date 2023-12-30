@@ -1,0 +1,164 @@
+{
+  "countries": [
+    {
+      "code": "HN",
+      "value": "Ecuador",
+      "states": [
+        { "code": "OH", "value": "Mississippi" },
+        { "code": "MS", "value": "Kentucky" },
+        { "code": "IL", "value": "Montana" },
+        { "code": "OK", "value": "Tennessee" },
+        { "code": "ME", "value": "Connecticut" },
+        { "code": "CT", "value": "Utah" },
+        { "code": "ND", "value": "New Hampshire" },
+        { "code": "NM", "value": "Georgia" },
+        { "code": "DE", "value": "California" },
+        { "code": "ID", "value": "Maine" }
+      ]
+    },
+    {
+      "code": "AF",
+      "value": "Netherlands",
+      "states": [
+        { "code": "AK", "value": "Maine" },
+        { "code": "SC", "value": "Texas" },
+        { "code": "NH", "value": "Arizona" },
+        { "code": "MO", "value": "Illinois" },
+        { "code": "PA", "value": "Maine" },
+        { "code": "ID", "value": "Louisiana" },
+        { "code": "RI", "value": "North Dakota" },
+        { "code": "WY", "value": "New Jersey" },
+        { "code": "CO", "value": "Kansas" },
+        { "code": "WI", "value": "Idaho" }
+      ]
+    },
+    {
+      "code": "ID",
+      "value": "Pitcairn Islands",
+      "states": [
+        { "code": "MS", "value": "Texas" },
+        { "code": "LA", "value": "Arizona" },
+        { "code": "MS", "value": "Maryland" },
+        { "code": "TN", "value": "Ohio" },
+        { "code": "PA", "value": "Indiana" },
+        { "code": "NE", "value": "Mississippi" },
+        { "code": "MD", "value": "Arizona" },
+        { "code": "IA", "value": "Michigan" },
+        { "code": "WI", "value": "New Mexico" },
+        { "code": "TX", "value": "Pennsylvania" }
+      ]
+    },
+    {
+      "code": "MO",
+      "value": "Gabon",
+      "states": [
+        { "code": "NH", "value": "Michigan" },
+        { "code": "NY", "value": "New Mexico" },
+        { "code": "WV", "value": "Oklahoma" },
+        { "code": "NM", "value": "Delaware" },
+        { "code": "ME", "value": "Indiana" },
+        { "code": "SC", "value": "Wyoming" },
+        { "code": "ID", "value": "Virginia" },
+        { "code": "PA", "value": "Wyoming" },
+        { "code": "LA", "value": "South Carolina" },
+        { "code": "MT", "value": "Georgia" }
+      ]
+    },
+    {
+      "code": "AI",
+      "value": "Democratic People's Republic of Korea",
+      "states": [
+        { "code": "FL", "value": "Maryland" },
+        { "code": "VA", "value": "Alaska" },
+        { "code": "VT", "value": "Utah" },
+        { "code": "MS", "value": "Massachusetts" },
+        { "code": "LA", "value": "Utah" },
+        { "code": "OR", "value": "Florida" },
+        { "code": "IL", "value": "Florida" },
+        { "code": "MN", "value": "Washington" },
+        { "code": "CT", "value": "West Virginia" },
+        { "code": "TN", "value": "Pennsylvania" }
+      ]
+    },
+    {
+      "code": "MW",
+      "value": "Hungary",
+      "states": [
+        { "code": "WI", "value": "Virginia" },
+        { "code": "WA", "value": "Mississippi" },
+        { "code": "WA", "value": "New Mexico" },
+        { "code": "NJ", "value": "Rhode Island" },
+        { "code": "NH", "value": "New Hampshire" },
+        { "code": "IA", "value": "Ohio" },
+        { "code": "ND", "value": "Utah" },
+        { "code": "MT", "value": "Kansas" },
+        { "code": "NC", "value": "Virginia" },
+        { "code": "UT", "value": "New York" }
+      ]
+    },
+    {
+      "code": "MG",
+      "value": "New Zealand",
+      "states": [
+        { "code": "MO", "value": "South Dakota" },
+        { "code": "OK", "value": "Virginia" },
+        { "code": "PA", "value": "South Dakota" },
+        { "code": "NV", "value": "New York" },
+        { "code": "TX", "value": "Wisconsin" },
+        { "code": "NH", "value": "North Carolina" },
+        { "code": "AK", "value": "West Virginia" },
+        { "code": "TX", "value": "Oregon" },
+        { "code": "MA", "value": "Pennsylvania" },
+        { "code": "FL", "value": "North Carolina" }
+      ]
+    },
+    {
+      "code": "SL",
+      "value": "Grenada",
+      "states": [
+        { "code": "HI", "value": "Utah" },
+        { "code": "NC", "value": "Oregon" },
+        { "code": "UT", "value": "Nevada" },
+        { "code": "NC", "value": "Montana" },
+        { "code": "AL", "value": "Nevada" },
+        { "code": "AK", "value": "Washington" },
+        { "code": "SC", "value": "Alaska" },
+        { "code": "CT", "value": "Illinois" },
+        { "code": "KY", "value": "Missouri" },
+        { "code": "MT", "value": "New Jersey" }
+      ]
+    },
+    {
+      "code": "LA",
+      "value": "Niger",
+      "states": [
+        { "code": "DE", "value": "Kansas" },
+        { "code": "GA", "value": "Alaska" },
+        { "code": "OK", "value": "New Jersey" },
+        { "code": "OH", "value": "Maine" },
+        { "code": "IL", "value": "Virginia" },
+        { "code": "NY", "value": "Pennsylvania" },
+        { "code": "VT", "value": "Arkansas" },
+        { "code": "MT", "value": "New Mexico" },
+        { "code": "MT", "value": "Georgia" },
+        { "code": "NJ", "value": "Mississippi" }
+      ]
+    },
+    {
+      "code": "JE",
+      "value": "Peru",
+      "states": [
+        { "code": "IA", "value": "Wyoming" },
+        { "code": "RI", "value": "Delaware" },
+        { "code": "FL", "value": "Oklahoma" },
+        { "code": "NC", "value": "Texas" },
+        { "code": "NY", "value": "Kentucky" },
+        { "code": "VA", "value": "Colorado" },
+        { "code": "MA", "value": "Tennessee" },
+        { "code": "NH", "value": "Illinois" },
+        { "code": "AZ", "value": "Alabama" },
+        { "code": "SC", "value": "Arizona" }
+      ]
+    }
+  ]
+}

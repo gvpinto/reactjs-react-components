@@ -7,12 +7,13 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "server": "json-server --watch ./db/db.json --port 3004",
+    "server": "json-server --watch ./db/db.json --port 3004 --delay 500",
     "preview": "vite preview"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.0.1",
     "@tanstack/react-query": "^5.15.4",
+    "@tanstack/react-query-devtools": "^5.15.5",
     "axios": "^1.6.3",
     "bulma": "^0.9.4",
     "immer": "^10.0.3",

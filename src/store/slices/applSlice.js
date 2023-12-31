@@ -5,8 +5,8 @@ const initialState = {
   selectedState: null,
 };
 
-const appSlice = createSlice({
-  name: 'app',
+const applSlice = createSlice({
+  name: 'appl',
   initialState,
   reducers: {
     updateSelectedCountry(state, action) {
@@ -18,18 +18,13 @@ const appSlice = createSlice({
   },
 });
 
-const selectSelectedCountry = (state) => state.app.selectedCountry;
-const selectSelectedState = (state) => state.app.selectedState;
+const selectSelectedCountry = (state) => state.appl.selectedCountry;
+const selectSelectedState = (state) => state.appl.selectedState;
 
 // const selectSelectedCountry
-export const { updateSelectedCountry, updateSelectedState } = appSlice.actions;
+export const { updateSelectedCountry, updateSelectedState } = applSlice.actions;
 
-// const selectAppState1 = (state) => ({
-//   selectedCountry: state.app.selectedCountry,
-//   selectedState: state.app.selectedState,
-// });
-
-export const selectAppState = createSelector(
+export const selectApplState = createSelector(
   [selectSelectedCountry, selectSelectedState],
   (selectedCountry, selectedState) => ({
     selectedCountry,
@@ -37,4 +32,4 @@ export const selectAppState = createSelector(
   }),
 );
 
-export default appSlice.reducer;
+export default applSlice.reducer;

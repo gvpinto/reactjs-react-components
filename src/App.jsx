@@ -3,6 +3,7 @@ import DropdownTest from './pages/DropdownTest';
 import 'bulma/css/bulma.min.css';
 import { Provider } from 'react-redux';
 import store from './store';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 // import { AppProvider } from './ contexts/AppContext';
 
 // Create a client
@@ -26,6 +27,7 @@ function App() {
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
           <DropdownTest />
+          <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </Provider>
     </div>

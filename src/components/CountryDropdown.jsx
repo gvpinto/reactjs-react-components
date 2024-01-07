@@ -31,7 +31,7 @@ function CountryDropdown() {
   } = useQuery({
     queryKey: ['countries'],
     queryFn: getCountries,
-    staleTime: 5 * 1000,
+    staleTime: 50 * 1000,
   });
 
   if (isPending) return 'Loading...';

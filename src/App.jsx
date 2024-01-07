@@ -4,6 +4,8 @@ import 'bulma/css/bulma.min.css';
 import { Provider } from 'react-redux';
 import store from './store';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import GlobalStyles from '../styles/GlobalStyles';
+import InputBoxTest from './pages/InputBoxTest';
 // import { AppProvider } from './ contexts/AppContext';
 
 // Create a client
@@ -26,7 +28,9 @@ function App() {
     <div className='container'>
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
-          <DropdownTest />
+          <GlobalStyles />
+          {/* <DropdownTest /> */}
+          <InputBoxTest />
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </Provider>

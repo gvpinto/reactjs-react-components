@@ -6,7 +6,7 @@ import {
   updateSelectedState,
 } from '../store/slices/applSlice';
 
-import Dropdown, { DropdownOptions, DropdownSelect } from '../ui/Dropdown';
+import Dropdown, { DropdownMenu, DropdownSelect } from '../ui/Dropdown';
 
 /**
  * Main Function
@@ -48,7 +48,7 @@ function StateDropdown() {
         getSelectedItem={updateSelectedItem}
       >
         <DropdownSelect id='state' />
-        <DropdownOptions items={states} />
+        <DropdownMenu items={states} />
       </Dropdown>
     </>
   );

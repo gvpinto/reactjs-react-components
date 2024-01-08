@@ -2,11 +2,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
 import { getCountries } from '../api/refDataApi';
 import {
-  selectApplState,
+  //   selectApplState,
   updateSelectedCountry,
 } from '../store/slices/applSlice';
 
-import Dropdown, { DropdownOptions, DropdownSelect } from '../ui/Dropdown';
+import Dropdown, { DropdownMenu, DropdownSelect } from '../ui/Dropdown';
 
 // ALT
 // import { AppConstants, useAppDispatch } from '../ contexts/AppContext';
@@ -18,8 +18,8 @@ import Dropdown, { DropdownOptions, DropdownSelect } from '../ui/Dropdown';
 function CountryDropdown() {
   // ALT
   //   const dispatch = useAppDispatch();
-  const { selectedCountry } = useSelector(selectApplState);
-  console.log('selectedCountry: ', selectedCountry);
+  //   const { selectedCountry } = useSelector(selectApplState);
+  //   console.log('selectedCountry: ', selectedCountry);
 
   const dispatch = useDispatch();
 
@@ -86,7 +86,7 @@ function CountryDropdown() {
         getSelectedItem={updateSelectedItem}
       >
         <DropdownSelect id='country' />
-        <DropdownOptions items={countries} />
+        <DropdownMenu items={countries} />
       </Dropdown>
     </>
   );

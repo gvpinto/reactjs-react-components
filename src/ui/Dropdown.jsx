@@ -1,11 +1,92 @@
+import styled, { css } from 'styled-components';
 import { useState } from 'react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { createContext } from 'react';
 import { FaAngleDown } from 'react-icons/fa';
 import useClickOutside from '../hooks/useClickOutside';
 import { useEscape } from '../hooks/useEscape';
+import InputBox from '../components/InputBox';
 // import { useImmer } from 'use-immer';
 // import { useImmerReducer } from 'use-immer';
+
+const StyledDropdown = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
+const StyledDropdownSelect = styled.div`
+  position: relative;
+`;
+
+const StyledDropdownSelectIcon = styled.span.attrs((props) => ({
+  $size: 2,
+}))`
+  display: inline-block;
+  position: absolute;
+  pointer-events: auto;
+  top: 55%;
+  /* left: 50%; */
+  transform: translate(-50%, -50%);
+  right: 1rem;
+  cursor: pointer;
+  /* top: 35%; */
+  pointer-events: auto;
+
+  & svg {
+    height: ${(props) => props.$size + 'rem'};
+    width: ${(props) => props.$size + 'rem'};
+  }
+`;
+
+const StyledDropdownMenu = styled.div`
+  position: absolute;
+
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #dee2e6;
+  width: 100%;
+  background: white;
+  height: 32rem;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  overflow: scroll;
+
+  &.hide {
+    display: none;
+  }
+`;
+
+const StyledDropdownContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  padding-bottom: 0.25rem;
+`;
+
+const StyledDropdownContentItem = styled.a`
+  display: inline-block;
+  text-decoration: none;
+  padding: 1rem;
+  color: #495057;
+  transition: background-color 0.4s;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: #f1f3f5;
+    border: none;
+    outline: none;
+  }
+
+  &.active {
+    background-color: #228be6;
+    color: #f8f9fa;
+  }
+`;
 
 const DropdownContext = createContext(null);
 
@@ -38,12 +119,12 @@ function Dropdown({ children, id, getSelectedItem }) {
         id,
       }}
     >
-      <div
-        className={`dropdown ${isActive}`}
-        // onBlur={() => setShowMenu(false)}
+      <StyledDropdown
+      // className={`dropdown ${isActive}`}
+      // onBlur={() => setShowMenu(false)}
       >
         {children}
-      </div>
+      </StyledDropdown>
     </DropdownContext.Provider>
   );
 }
@@ -78,47 +159,40 @@ function DropdownSelect() {
   }
 
   return (
-    <div className='dropdown-trigger'>
-      <p className='control has-icons-right'>
-        <input
-          name={`${id}-display`}
-          id={`${id}-display`}
-          className='input'
-          type='text'
-          placeholder='Select or Search'
-          aria-haspopup='true'
-          aria-controls='dropdown-menu'
-          value={searchValue}
-          //   value={searchFilter}
-          onClick={handleOnClick}
-          onChange={handleOnChange}
-          //   onBlur={() => setShowMenu(() => false)}
-        />
-        <input
-          name={id}
-          id={id}
-          className='input'
-          type='hidden'
-          value={selectedItem?.value ?? ''}
-          //   onBlur={() => setShowMenu(() => false)}
-        />
-        <span className='icon is-right'>
-          <FaAngleDown aria-hidden='true' />
-        </span>
-      </p>
-    </div>
+    <StyledDropdownSelect>
+      <InputBox
+        name={`${id}-display`}
+        id={`${id}-display`}
+        placeholder='Select or Search'
+        value={searchValue}
+        onClick={handleOnClick}
+        onChange={handleOnChange}
+        $variation='select'
+      />
+
+      <input
+        name={id}
+        id={id}
+        type='hidden'
+        value={selectedItem?.value ?? ''}
+        //   onBlur={() => setShowMenu(() => false)}
+      />
+      <StyledDropdownSelectIcon>
+        <FaAngleDown aria-hidden='true' />
+      </StyledDropdownSelectIcon>
+    </StyledDropdownSelect>
   );
 }
 
 /**
- * DropdownOptions - Is the Dropdown list box
+ * DropdownMenu - Is the Dropdown list box
  * @param {items} item list to be displayed
  * @returns
  */
-function DropdownOptions({ items }) {
-  //   console.log('Rendering DropdownOptions');
+function DropdownMenu({ items }) {
+  //   console.log('Rendering DropdownMenu');
 
-  const { selectedItem, setSelectedItem, setShowMenu, searchFilter } =
+  const { selectedItem, setSelectedItem, setShowMenu, searchFilter, showMenu } =
     useContext(DropdownContext);
 
   // Handle Outside Click
@@ -152,31 +226,32 @@ function DropdownOptions({ items }) {
       item.value.toLowerCase().includes(searchFilter.toLowerCase()),
     )
     .map((item) => {
-      const isSelected = item.key === selectedItem?.id ? 'is-active' : '';
+      const isActive = item.id === selectedItem?.id ? 'active' : '';
 
       return (
-        <a
-          href='#'
+        <StyledDropdownContentItem
           key={item.id}
-          className={`dropdown-item ${isSelected}`}
+          className={isActive}
           onClick={() => handleSelect(item)}
         >
           {item.value}
-        </a>
+        </StyledDropdownContentItem>
       );
     });
-  console.log('Dropdown list: ', dropdownList.length);
+
+  const hide = !showMenu ? 'hide' : '';
+  //   console.log('Dropdown list: ', dropdownList.length);
   return (
-    <div
-      className='dropdown-menu'
+    <StyledDropdownMenu
+      className={hide}
       id='dropdown-menu'
       role='menu'
       ref={menuRef}
     >
-      <div className='dropdown-content'>{dropdownList}</div>
-    </div>
+      <StyledDropdownContent>{dropdownList}</StyledDropdownContent>
+    </StyledDropdownMenu>
   );
 }
 
 export default Dropdown;
-export { DropdownOptions, DropdownSelect };
+export { DropdownMenu, DropdownSelect };

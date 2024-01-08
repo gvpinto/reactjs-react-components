@@ -45,11 +45,10 @@ const StyledInput = styled.input.attrs((props) => ({
   }
 `;
 
-function InputBox({ variation }) {
+function InputBox(props) {
   return (
     <StyledInput
-      type='text'
-      $variation={variation}
+      {...props}
       placeholder='Select or Search...'
     />
   );

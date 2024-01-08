@@ -3,7 +3,10 @@ import InputBox from '../components/InputBox';
 function InputBoxTest() {
   return (
     <div>
-      <InputBox variation='select' />
+      <InputBox
+        variation='select'
+        type='hidden'
+      />
     </div>
   );
 }

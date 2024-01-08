@@ -34,28 +34,13 @@ const GlobalStyles = createGlobalStyle`
         font-size: 62.5%;
     }
 
-    body {
+    /* body {
         font-family: 'Roboto', sans-serif;
         font-size: 1.6rem;
-    }
-
-    h1 {
-        height: 2em;
-    }
-
-    .container {
-    margin: 0 auto;
-    padding: 10px;
-    max-width: 40em;
-    }
-
-    *::placeholder {
-        color: #ced4da;
-        opacity: 1;
-    }
-
+    } */
+    
     body {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     color: var(--color-grey-7);
 
     transition: color 0.3s, background-color 0.3s;
@@ -64,13 +49,29 @@ const GlobalStyles = createGlobalStyle`
     font-size: 1.6rem;
     }
 
-    input,
+    h1 {
+        height: 2rem;
+    }
+
+    .container {
+        margin: 0 auto;
+        padding: 10px;
+        max-width: 120rem;
+    }
+
+    *::placeholder {
+        color: #ced4da;
+        opacity: 1;
+    }
+
+
+    /* input,
     button,
     textarea,
     select {
     font: inherit;
     color: inherit;
-    }
+    } */
 
     button {
     cursor: pointer;
@@ -95,20 +96,20 @@ const GlobalStyles = createGlobalStyle`
     } */
 
     /* Parent selector, finally 😃 */
-    button:has(svg) {
+    /* button:has(svg) {
     line-height: 0;
-    }
+    } */
 
-    a {
+    /* a {
     color: inherit;
     text-decoration: none;
-    }
+    } */
 
-    ul {
+    /* ul {
     list-style: none;
-    }
+    } */
 
-    p,
+    /* p,
     h1,
     h2,
     h3,
@@ -117,10 +118,10 @@ const GlobalStyles = createGlobalStyle`
     h6 {
     overflow-wrap: break-word;
     hyphens: auto;
-    }
+    } */
 
-    img {
-    max-width: 100%;
+    /* img {
+    max-width: 100%; */
 
     /* For dark mode */
     filter: grayscale(var(--image-grayscale)) opacity(var(--image-opacity));

@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import DropdownTest from './pages/DropdownTest';
-import 'bulma/css/bulma.min.css';
+// import 'bulma/css/bulma.min.css';
 import { Provider } from 'react-redux';
 import store from './store';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -29,8 +29,8 @@ function App() {
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
           <GlobalStyles />
-          {/* <DropdownTest /> */}
-          <InputBoxTest />
+          {/* <InputBoxTest /> */}
+          <DropdownTest />
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </Provider>

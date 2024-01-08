@@ -7,7 +7,9 @@ function DropdownTest() {
       <div>
         <CountryDropdown />
       </div>
-      <div>{/* <StateDropdown /> */}</div>
+      <div>
+        <StateDropdown />
+      </div>
     </div>
   );
 }

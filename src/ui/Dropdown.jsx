@@ -38,18 +38,22 @@ const StyledDropdownSelectIcon = styled.span.attrs((props) => ({
   }
 `;
 
-const StyledDropdownMenu = styled.div`
+const StyledDropdownMenu = styled.div.attrs((props) => ({
+  $menuheight: props.$menuheight ?? 32,
+}))`
   position: absolute;
 
-  display: flex;
-  flex-direction: column;
+  /* display: flex; */
+  /* flex-direction: column; */
   border: 1px solid #dee2e6;
+  left: 0;
   width: 100%;
   background: white;
-  height: 32rem;
+  height: ${(props) => props.$menuheight + 'rem'};
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   overflow: scroll;
+  z-index: 1000;
 
   &.hide {
     display: none;
@@ -146,12 +150,14 @@ function DropdownSelect() {
     // setSearchFilter(() => selectedItem?.value ?? '');
   }, [selectedItem]);
 
+  // Click on this the first time
   function handleOnClick(e) {
     e.target.select();
     setSearchFilter(() => '');
     setShowMenu(true);
   }
 
+  // Search the list
   function handleOnChange(e) {
     setSearchFilter(() => e.target.value);
     setSearchValue(() => e.target.value);
@@ -239,6 +245,9 @@ function DropdownMenu({ items }) {
       );
     });
 
+  const numOfItems = dropdownList?.length ?? 0;
+  const menuheight = (numOfItems > 10 ? 10 : numOfItems) * 4.5;
+
   const hide = !showMenu ? 'hide' : '';
   //   console.log('Dropdown list: ', dropdownList.length);
   return (
@@ -246,6 +255,7 @@ function DropdownMenu({ items }) {
       className={hide}
       id='dropdown-menu'
       role='menu'
+      $menuheight={menuheight}
       ref={menuRef}
     >
       <StyledDropdownContent>{dropdownList}</StyledDropdownContent>

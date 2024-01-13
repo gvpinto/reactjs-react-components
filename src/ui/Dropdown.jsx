@@ -18,6 +18,7 @@ const StyledDropdownSelect = styled.div`
   position: relative;
 `;
 
+// TODO: control the height and width of the icon dynamically
 const StyledDropdownSelectIcon = styled.span.attrs((props) => ({
   $size: 2,
 }))`

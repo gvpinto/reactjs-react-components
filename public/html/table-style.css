@@ -1,0 +1,204 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+/* ------------------------ */
+/* GENERAL STYLES */
+/* ------------------------ */
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #343a40;
+  line-height: 1;
+  /* display: flex;
+  justify-content: center; */
+}
+
+/* ******************** */
+/* TABLE COMPONENT      */
+/* ******************** */
+
+.table-component {
+  margin: 2rem;
+  font-size: 1.8rem;
+}
+
+/* ******************** */
+/* TABLE FILTER         */
+/* ******************** */
+
+.table-component .table-filter {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.8rem;
+  font-size: 1.8rem;
+}
+
+.table-component .table-filter select,
+.table-component .table-filter input {
+  padding: 0.8rem;
+  outline: none;
+  border-radius: 6px;
+  border: 1px solid #087f5b;
+}
+
+.table-component .table-filter input {
+  width: 20rem;
+}
+
+.table-component .table-filter .filter-icon {
+  position: absolute;
+  right: 25px;
+  transform: translateY(35%);
+}
+/* ******************** */
+/* TABLE                */
+/* ******************** */
+
+.table-component .table {
+  table-layout: fixed;
+  width: 100%;
+
+  border-collapse: collapse;
+  font-size: 1.6rem;
+}
+
+.table-component .table thead th {
+  padding: 1.6rem 0.6rem 1.6rem 0.8rem;
+  /* text-align: center; */
+  /* border: 1px solid #343a40; */
+}
+
+.table-component .table tbody td {
+  padding: 1.6rem 0.6rem 1.6rem 0.8rem;
+  /* text-align: left; */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* border: 1px solid #343a40; */
+}
+
+.table-component .table thead tr {
+  background-color: #343a40;
+  color: #fff;
+}
+
+.table-component .table thead th {
+  /* Can be moved to tr */
+  /* background-color: #087f5b; */
+  /* color: #fff; */
+  /* width: 25%; */
+}
+
+.table-component .table tbody tr:nth-child(odd) {
+  background-color: #f8f9fa;
+}
+.table-data tbody tr:nth-child(even) {
+  background-color: #e9ecef;
+}
+
+/* ******************** */
+/* PAGINATION           */
+/* ******************** */
+
+.table-component .table-pagination {
+  width: 100%;
+  /* display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  align-items: center; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.8rem auto 1.4rem;
+  font-size: 1.8rem;
+  gap: 1rem;
+}
+
+.table-component .table-pagination .pagination-rows-per-page {
+  flex: 0 1 33%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.table-component .table-pagination .rows-per-page {
+  display: inline-block;
+  padding: 0.8rem;
+  border: 1px solid #087f5b;
+  border-radius: 6px;
+}
+
+.table-component .table-pagination .pagination-page-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex: 34%;
+}
+.table-component .table-pagination .pagination-other {
+  flex: 0 1 33%;
+}
+
+.table-component .table-pagination table .table-pagination .arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px solid #087f5b;
+  height: 3.2rem;
+  width: 3.2rem;
+  border-radius: 50%;
+  cursor: pointer;
+  /* box-shadow: 0 0 6px rgba(0, 0, 0, 0.2); */
+}
+
+.table-component .table-pagination .arrow:hover svg,
+.table-component .table-pagination .arrow:active svg {
+  stroke: #fff;
+}
+.table-component .table-pagination .arrow:hover,
+.table-component .table-pagination .arrow:active {
+  background-color: #087f5b;
+}
+
+.table-component .table-pagination .arrow svg {
+  stroke: #087f5b;
+  stroke-width: 1.5px;
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+.table-component .table-pagination .page-num:link,
+.table-component .table-pagination .page-num:visited {
+  text-decoration: none;
+  color: #087f5b;
+  display: inline-block;
+  display: flex;
+  width: 3.2rem;
+  height: 3.2rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.table-component .table-pagination .page-num:hover,
+.table-component .table-pagination .page-num:active {
+  background-color: #087f5b;
+  color: #fff;
+}
+
+.table-component .table-pagination .page-num.selected {
+  background-color: #087f5b;
+  color: #fff;
+}

@@ -9,6 +9,9 @@ import InputBox from '../components/InputBox';
 // import { useImmer } from 'use-immer';
 // import { useImmerReducer } from 'use-immer';
 
+/*
+    Styling Components
+*/
 const StyledDropdown = styled.div`
   position: relative;
   width: 100%;
@@ -39,6 +42,7 @@ const StyledDropdownSelectIcon = styled.span.attrs((props) => ({
   }
 `;
 
+// TODO: Change styling based on if the drop down is open or not
 const StyledDropdownMenu = styled.div.attrs((props) => ({
   $menuheight: props.$menuheight ?? 32,
 }))`
@@ -93,6 +97,7 @@ const StyledDropdownContentItem = styled.a`
   }
 `;
 
+// Creating a context
 const DropdownContext = createContext(null);
 
 /**
@@ -139,8 +144,8 @@ function Dropdown({ children, id, getSelectedItem }) {
  * @returns UI
  */
 
-function DropdownSelect() {
-  //   console.log('Rendering DropdownSelect');
+function Select() {
+  //   console.log('Rendering Select');
   const { setShowMenu, selectedItem, setSearchFilter, searchFilter, id } =
     useContext(DropdownContext);
 
@@ -164,6 +169,8 @@ function DropdownSelect() {
     setSearchValue(() => e.target.value);
     // e.stopPropogation();
   }
+
+  // TODO: Need to handle up and down arrow key. If the arrow key is pressed only the item displayed in the select box should change and the dropdown should no appear?
 
   return (
     <StyledDropdownSelect>
@@ -192,12 +199,12 @@ function DropdownSelect() {
 }
 
 /**
- * DropdownMenu - Is the Dropdown list box
+ * Menu - Is the Dropdown list box
  * @param {items} item list to be displayed
  * @returns
  */
-function DropdownMenu({ items }) {
-  //   console.log('Rendering DropdownMenu');
+function Menu({ items }) {
+  //   console.log('Rendering Menu');
 
   const { selectedItem, setSelectedItem, setShowMenu, searchFilter, showMenu } =
     useContext(DropdownContext);
@@ -264,5 +271,6 @@ function DropdownMenu({ items }) {
   );
 }
 
+Dropdown.Select = Select;
+Dropdown.Menu = Menu;
 export default Dropdown;
-export { DropdownMenu, DropdownSelect };

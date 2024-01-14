@@ -6,6 +6,7 @@ import store from './store';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import GlobalStyles from '../styles/GlobalStyles';
 import InputBoxTest from './pages/InputBoxTest';
+import SyncTableTest from './pages/SyncTableTest';
 // import { AppProvider } from './ contexts/AppContext';
 
 // Create a client
@@ -30,7 +31,8 @@ function App() {
         <QueryClientProvider client={queryClient}>
           <GlobalStyles />
           {/* <InputBoxTest /> */}
-          <DropdownTest />
+          {/* <DropdownTest /> */}
+          <SyncTableTest />
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </Provider>

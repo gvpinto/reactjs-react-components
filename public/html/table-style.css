@@ -72,14 +72,18 @@ body {
   font-size: 1.6rem;
 }
 
+.table-component .table thead th,
+.table-component .table tbody td {
+  padding: 1.8rem 2rem;
+}
+
 .table-component .table thead th {
-  padding: 1.6rem 0.6rem 1.6rem 0.8rem;
   /* text-align: center; */
   /* border: 1px solid #343a40; */
 }
 
 .table-component .table tbody td {
-  padding: 1.6rem 0.6rem 1.6rem 0.8rem;
+  /* padding: 1.6rem 0.6rem 1.6rem 0.8rem; */
   /* text-align: left; */
   white-space: nowrap;
   overflow: hidden;
@@ -92,11 +96,45 @@ body {
   color: #fff;
 }
 
-.table-component .table thead th {
-  /* Can be moved to tr */
-  /* background-color: #087f5b; */
-  /* color: #fff; */
-  /* width: 25%; */
+.table-component .table thead tr th:nth-child(1),
+.table-component .table tbody tr td:nth-child(1) {
+  width: 20%;
+  text-align: left;
+}
+.table-component .table thead tr th:nth-child(2),
+.table-component .table tbody tr td:nth-child(2) {
+  width: 20%;
+  text-align: left;
+}
+.table-component .table thead tr th:nth-child(3),
+.table-component .table tbody tr td:nth-child(3) {
+  width: 10%;
+  text-align: left;
+}
+.table-component .table thead tr th:nth-child(4),
+.table-component .table tbody tr td:nth-child(4) {
+  width: 10%;
+  text-align: left;
+}
+.table-component .table thead tr th:nth-child(5),
+.table-component .table tbody tr td:nth-child(5) {
+  width: 10%;
+  text-align: left;
+}
+.table-component .table thead tr th:nth-child(6),
+.table-component .table tbody tr td:nth-child(6) {
+  width: 5%;
+  text-align: center;
+}
+.table-component .table thead tr th:nth-child(7),
+.table-component .table tbody tr td:nth-child(7) {
+  width: 10%;
+  text-align: right;
+}
+.table-component .table thead tr th:nth-child(8),
+.table-component .table tbody tr td:nth-child(8) {
+  width: 10%;
+  text-align: left;
 }
 
 .table-component .table tbody tr:nth-child(odd) {

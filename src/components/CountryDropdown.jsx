@@ -6,7 +6,7 @@ import {
   updateSelectedCountry,
 } from '../store/slices/applSlice';
 
-import Dropdown, { DropdownMenu, DropdownSelect } from '../ui/Dropdown';
+import Dropdown from '../ui/Dropdown';
 
 // ALT
 // import { AppConstants, useAppDispatch } from '../ contexts/AppContext';
@@ -85,8 +85,8 @@ function CountryDropdown() {
         id='country'
         getSelectedItem={updateSelectedItem}
       >
-        <DropdownSelect id='country' />
-        <DropdownMenu items={countries} />
+        <Dropdown.Select id='country' />
+        <Dropdown.Menu items={countries} />
       </Dropdown>
     </>
   );

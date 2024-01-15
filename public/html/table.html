@@ -36,7 +36,7 @@
   </head>
   <body>
     <div class="table-component">
-      <div class="table-filter">
+        <div class="table-filter">
         <select
           class="filter-column"
           name="filter-column"
@@ -59,20 +59,27 @@
         </span>
       </div>
       <table class="table">
-        <!-- <colgroup>
-          <col style="width: 20%;" />
-          <col style="width: 20%;" />
-          <col style="width: 10%;" />
-          <col style="width: 10%;" />
-          <col style="width: 10%;" />
-          <col style="width: 5%;" />
-          <col style="width: 10%;" />
-          <col style="width: 15%;" />
-        </colgroup> -->
+
         <thead>
           <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Street address</th>
+            <th scope="col">
+                <span class="title">
+                    <span>Name</span> 
+                    <span class="sort">
+                        <ion-icon name="chevron-up-outline"></ion-icon>
+                        <ion-icon name="chevron-down-outline"></ion-icon>
+                    </span>
+                </span>
+            </th>
+            <th scope="col">
+                <span class="title">
+                    <span>Street Address</span>
+                    <span class="sort">
+                        <ion-icon name="chevron-up-outline"></ion-icon>
+                        <!-- <ion-icon name="chevron-down-outline"></ion-icon> -->
+                    </span>
+                 </span>
+            </th>
             <th scope="col">City</th>
             <th scope="col">State</th>
             <th scope="col">Zipcode</th>
@@ -217,7 +224,7 @@
             </svg>
           </div>
         </div>
-        <div class="pagination-other"></div>
+        <div class="pagination-other">&nbsp;</div>
       </div>
     </div>
   </body>

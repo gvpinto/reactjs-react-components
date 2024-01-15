@@ -74,12 +74,26 @@ body {
 
 .table-component .table thead th,
 .table-component .table tbody td {
-  padding: 1.8rem 2rem;
+  padding: 1rem 2rem;
 }
 
-.table-component .table thead th {
+.table-component .table thead tr th {
+  /* display: inline-block; */
   /* text-align: center; */
   /* border: 1px solid #343a40; */
+}
+
+.table-component .table thead th .title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 3.2rem;
+}
+.table-component .table thead th .title .sort {
+  display: flex;
+  gap: 0;
+  flex-direction: column;
+  font-size: 1.6rem;
 }
 
 .table-component .table tbody td {

@@ -15,6 +15,8 @@ const GlobalStyles = createGlobalStyle`
             --color-grey-7:#495057;
             --color-grey-8:#343a40;
             --color-grey-9:#212529;
+
+            --color-blue-8: #0a2d4e
         }
 
     }
@@ -125,7 +127,7 @@ const GlobalStyles = createGlobalStyle`
 
     /* For dark mode */
     filter: grayscale(var(--image-grayscale)) opacity(var(--image-opacity));
-    }
+    
 `;
 
 export default GlobalStyles;

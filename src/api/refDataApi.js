@@ -21,3 +21,12 @@ export async function getStates(countryId) {
     throw new Error('Error while retrieving the countries list');
   }
 }
+
+export async function getUsers() {
+  try {
+    const response = await axios.get('http://localhost:3004/users');
+    return response.data;
+  } catch (error) {
+    throw new Error('Error while retrieving users');
+  }
+}

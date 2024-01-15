@@ -21,7 +21,7 @@ function SyncTableTest() {
       width: '20%',
       textColor: '#FFF',
       bgColor: '',
-      sort: true,
+      sort: false,
       filter: true,
     },
     {
@@ -32,7 +32,7 @@ function SyncTableTest() {
       width: '10%',
       textColor: '#FFF',
       bgColor: '',
-      sort: true,
+      sort: false,
       filter: true,
     },
     {
@@ -54,7 +54,7 @@ function SyncTableTest() {
       width: '10%',
       textColor: '#FFF',
       bgColor: '',
-      sort: true,
+      sort: false,
       filter: true,
     },
     {

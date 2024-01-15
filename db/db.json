@@ -222,5 +222,57 @@
     { "id": 198, "countryId": 20, "key": "SC", "value": "New Mexico" },
     { "id": 199, "countryId": 20, "key": "OH", "value": "Delaware" },
     { "id": 200, "countryId": 20, "key": "AZ", "value": "Pennsylvania" }
+  ],
+  "users": [
+    {
+      "name": "Darryl Harris",
+      "address": "369 Antonette Manors",
+      "city": "Idaho Falls",
+      "state": "Wyoming",
+      "zipcode": "29671",
+      "age": 23,
+      "salary": 114294.34,
+      "hiredate": "2023-04-11T02:25:59.790Z"
+    },
+    {
+      "name": "Darian Stanton",
+      "address": "7691 Poplar Street",
+      "city": "Roobtown",
+      "state": "Alaska",
+      "zipcode": "24851",
+      "age": 28,
+      "salary": 76415.3,
+      "hiredate": "2021-03-14T20:56:09.054Z"
+    },
+    {
+      "name": "Ms. Jamarcus Considine",
+      "address": "479 Jazlyn Fork",
+      "city": "Salina",
+      "state": "Tennessee",
+      "zipcode": "21914",
+      "age": 31,
+      "salary": 95093.77,
+      "hiredate": "2017-11-12T14:58:38.662Z"
+    },
+    {
+      "name": "Cyril Bechtelar",
+      "address": "573 America Squares",
+      "city": "Bartonport",
+      "state": "Michigan",
+      "zipcode": "52326",
+      "age": 32,
+      "salary": 189301.17,
+      "hiredate": "2017-04-03T15:36:49.394Z"
+    },
+    {
+      "name": "Leonard D'Amore",
+      "address": "156 Lucile Valley",
+      "city": "Wardfurt",
+      "state": "California",
+      "zipcode": "06641",
+      "age": 50,
+      "salary": 86975.65,
+      "hiredate": "2018-01-16T12:36:51.866Z"
+    }
   ]
 }

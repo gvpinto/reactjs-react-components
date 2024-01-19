@@ -54,6 +54,7 @@ const Table = styled.table`
   font-size: 1.6rem;
 `;
 
+// TODO: Reduce size of the font for tablet and mobile devices
 // ** MAIN PARENT COMPONENT **
 function SyncTable({ children, metadata, defColSortId, data }) {
   const [state, dispatch] = useImmerReducer(tableReducer, initialState);
@@ -91,8 +92,8 @@ function Filter() {
 // Style header - th to dynamically assign style based on the metadata
 const TableHeaderCell = styled.th.attrs((props) => ({
   $align: props.$align || 'center',
-  $bgColor: props.$bgColor || '#0a2d4e',
-  $textColor: props.$textColor || '#fff',
+  $bgColor: props.$bgColor || 'var(--table-header-bg-color)',
+  $textColor: props.$textColor || 'var(--table-header-text-color)',
 }))`
   width: ${(props) => props.$width};
   text-align: ${(props) => props.$align};

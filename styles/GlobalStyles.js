@@ -5,6 +5,8 @@ const GlobalStyles = createGlobalStyle`
     :root {
 
         & {
+            --color-white: #fff;
+
             --color-grey-0:#f8f9fa;
             --color-grey-1:#f1f3f5;
             --color-grey-2:#e9ecef;
@@ -16,7 +18,12 @@ const GlobalStyles = createGlobalStyle`
             --color-grey-8:#343a40;
             --color-grey-9:#212529;
 
-            --color-blue-8: #0a2d4e
+            --color-blue-8: #0a2d4e;
+
+            --table-header-bg-color: #0a2d4e;
+            --table-header-text-color: var(--color-white);
+            --table-data-bg-odd-row-color: var(--color-grey-0);
+            --table-data-bg-even-row-color: var(--color-grey-2);
         }
 
     }
@@ -66,6 +73,13 @@ const GlobalStyles = createGlobalStyle`
         opacity: 1;
     }
 
+    table tbody tr:nth-child(odd) {
+        background-color: var(--table-data-bg-odd-row-color);
+    }
+
+    table tbody tr:nth-child(even) {
+    background-color: var(--table-data-bg-even-row-color);
+    }
 
     /* input,
     button,

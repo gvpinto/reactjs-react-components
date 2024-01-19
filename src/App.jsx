@@ -25,6 +25,7 @@ const queryClient = new QueryClient();
 // }
 
 function App() {
+  // TODO: Wrap Error Boundary
   return (
     <div className='container'>
       <Provider store={store}>

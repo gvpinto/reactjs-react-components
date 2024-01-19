@@ -13,12 +13,14 @@ import {
 const SyncTableContext = createContext(null);
 const SyncTableDispatchContext = createContext(null);
 
+// ** REDUCER **
+
 // Initial State of the SyncTable
 const initialState = {
   metadata: [],
   defColSortId: 0,
   // 0: None, 1: Ascending, 2: Descending
-  currSortCol: { id: 0, sort: 0 },
+  currSortCol: { id: 0, sort: 0, colname: '' },
   data: [],
 };
 
@@ -27,10 +29,10 @@ function tableReducer(state, action) {
     case 'init':
       state.metadata = action.payload.metadata;
       state.defColSortId = action.payload.defColSortId;
+      state.data = action.payload.data;
       break;
 
     case 'sortcol':
-      console.log('action.payload: ', action.payload);
       state.currSortCol = action.payload;
       break;
 
@@ -52,9 +54,7 @@ const Table = styled.table`
   font-size: 1.6rem;
 `;
 
-/**
- * Main Parent Component
- */
+// ** MAIN PARENT COMPONENT **
 function SyncTable({ children, metadata, defColSortId, data }) {
   const [state, dispatch] = useImmerReducer(tableReducer, initialState);
 
@@ -72,9 +72,7 @@ function SyncTable({ children, metadata, defColSortId, data }) {
   return (
     <SyncTableContext.Provider value={state}>
       <SyncTableDispatchContext.Provider value={dispatch}>
-        <TableComponent>
-          <Table>{children}</Table>
-        </TableComponent>
+        {children}
       </SyncTableDispatchContext.Provider>
     </SyncTableContext.Provider>
   );
@@ -88,23 +86,39 @@ function Filter() {
   return <div>TableFilter</div>;
 }
 
+// ** STYLED COMPONENTS **
+
 // Style header - th to dynamically assign style based on the metadata
-const TableHeader = styled.th.attrs((props) => ({
-  $hAlign: props.$hAlign || 'center',
+const TableHeaderCell = styled.th.attrs((props) => ({
+  $align: props.$align || 'center',
   $bgColor: props.$bgColor || '#0a2d4e',
   $textColor: props.$textColor || '#fff',
 }))`
   width: ${(props) => props.$width};
-  text-align: ${(props) => props.$hAlign};
+  text-align: ${(props) => props.$align};
   padding: 1.6rem 1.8rem;
   background-color: ${(props) => props.$bgColor};
   color: ${(props) => props.$textColor};
   line-height: 1;
+  vertical-align: middle;
+  /* Disable quick succession clicks causing selects  */
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 `;
 
-const SpanTitle = styled.span`
+const SpanTitle = styled.span.attrs((props) => ({
+  $align: props.$align || 'center',
+}))`
   display: flex;
   align-items: center;
+  justify-content: ${(props) =>
+    props.$align === 'left'
+      ? 'flex-start'
+      : props.$align === 'right'
+      ? 'flex-end'
+      : 'center'};
   gap: 0.5rem;
   height: 3.2rem;
   font-size: 1.6rem;
@@ -136,23 +150,34 @@ const TableCell = styled.td.attrs((props) => ({}))`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: ${(props) => props.$align};
+  padding: 1rem 1rem;
 `;
+
+// ** DATA COMPONENT **
 
 function Data() {
   console.log('Render Data:');
   const { metadata, currSortCol, data } = useTableState();
   const dispatch = useTableDispatch();
 
-  console.log('currSortCol: ', currSortCol);
+  // ** EVENT HANDLERS **
 
   // Handle the clicking of the sort Icon
-  function handleColSort(e, itemId, currSortCol) {
-    if (currSortCol.id !== itemId) {
-      dispatch({ type: 'sortcol', payload: { id: itemId, sort: 1 } });
+  function handleColSort(e, item, currSortCol) {
+    if (currSortCol.id !== item.id) {
+      dispatch({
+        type: 'sortcol',
+        payload: { id: item.id, colname: item.colname, sort: 1 },
+      });
     } else {
       dispatch({
         type: 'sortcol',
-        payload: { id: currSortCol.id, sort: (currSortCol.sort + 1) % 3 },
+        payload: {
+          id: currSortCol.id,
+          colname: item.colname,
+          sort: (currSortCol.sort + 1) % 3,
+        },
       });
     }
   }
@@ -160,13 +185,14 @@ function Data() {
   // If metadata and currentSortCol is null and not initialized do to render
   if (!metadata || metadata.length === 0 || !currSortCol) return null;
 
-  function sortIcon(item, currSortCol) {
+  // Assign the correct sort icon based on 2 attributes
+  function sortIcon(metaItem, currSortCol) {
     return (
       <>
-        <SpanName>{item.name}</SpanName>
-        <SpanSort onClick={(e) => handleColSort(e, item.id, currSortCol)}>
-          {item.sort ? (
-            currSortCol.id === item.id ? (
+        <SpanName>{metaItem.title}</SpanName>
+        <SpanSort onClick={(e) => handleColSort(e, metaItem, currSortCol)}>
+          {metaItem.sort ? (
+            currSortCol.id === metaItem.id ? (
               currSortCol.sort === 1 ? (
                 <HiMiniChevronUp />
               ) : currSortCol.sort === 2 ? (
@@ -212,38 +238,101 @@ function Data() {
     // }
   }
 
-  const tableHeader = metadata.map((item) => {
+  // ** CREATE TABLE HEADER **
+
+  // Create table header
+  const tableHeader = metadata.map((metaItem) => {
     return (
-      <TableHeader
-        key={item.id}
-        $width={item.width}
-        $hAlign={item.hAlign}
+      <TableHeaderCell
+        key={metaItem.id}
+        $width={metaItem.width}
       >
-        <SpanTitle>{sortIcon(item, currSortCol)}</SpanTitle>
-      </TableHeader>
+        <SpanTitle $align={metaItem.hAlign}>
+          {sortIcon(metaItem, currSortCol)}
+        </SpanTitle>
+      </TableHeaderCell>
     );
   });
 
-  const tableBody = data.map((item) => {
-    return (
-      <tr key={item.id}>
-        {Object.keys(item).forEach((key, index) => (
-          <td key={index}> </td>
-        ))}
+  // ** CREATE TABLE BODY **
+  let tableBody;
+
+  // Create sort function for sorting
+  function sortFn(currSortCol) {
+    const key = currSortCol.colname;
+    const sortFactor =
+      currSortCol.sort === 1 ? 1 : currSortCol.sort === 2 ? -1 : 0;
+    // sortBy = currSortCol.
+    return (a, b) => {
+      let valueA = a[key];
+      let valueB = b[key];
+
+      if (typeof a[key] === 'string') {
+        valueA = a[key].toLowerCase();
+        valueB = b[key].toLowerCase();
+      }
+
+      return valueA < valueB
+        ? -1 * sortFactor
+        : valueA > valueB
+        ? 1 * sortFactor
+        : 0;
+    };
+  }
+
+  // Create the rows only if the data is present
+  if (!data || data.length === 0) {
+    tableBody = (
+      <tr>
+        <TableCell
+          $align='center'
+          colSpan={metadata.length}
+        >
+          No records returned
+        </TableCell>
       </tr>
     );
-  });
+  } else {
+    // Shallow Copy before sort
+    // const sortedData = [...data];
+    const sortedData = Array.from(data);
 
+    // Only sort after the sort has been clicked
+    if (!(currSortCol.id === 0 || currSortCol.name === '')) {
+      sortedData.sort(sortFn(currSortCol));
+    }
+
+    // Sort table data for the body
+    tableBody = sortedData.map((dataItem) => {
+      return (
+        <tr key={dataItem.id}>
+          {metadata.map((metaItem) => (
+            <TableCell
+              $align={metaItem.dAlign}
+              key={metaItem.colname}
+            >
+              {dataItem[metaItem.colname]}
+            </TableCell>
+          ))}
+        </tr>
+      );
+    });
+  }
+
+  // Return the rendered Data component
   return (
-    <>
-      <thead>
-        <tr>{tableHeader}</tr>
-      </thead>
-
-      <tbody>{tableBody}</tbody>
-    </>
+    <TableComponent>
+      <Table>
+        <thead>
+          <tr>{tableHeader}</tr>
+        </thead>
+        <tbody>{tableBody}</tbody>
+      </Table>
+    </TableComponent>
   );
 }
+
+// ** PAGINATION **
 
 function Pagination() {
   console.log('Render Pagination:');

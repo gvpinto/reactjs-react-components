@@ -3,10 +3,11 @@ import { faker } from '@faker-js/faker';
 // faker.seed(123);
 
 let users = [];
-const totalUsers = 5;
+const totalUsers = 20;
 
 for (let i = 0; i < totalUsers; i++) {
   const user = {
+    id: i,
     name: faker.person.fullName({
       sex: 'female' | 'male',
     }),

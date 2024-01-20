@@ -35,7 +35,7 @@ export const metadata = [
     textColor: '#FFF',
     bgColor: '',
     sort: true,
-    filter: true,
+    filter: false,
     formatFn: null,
   },
   {

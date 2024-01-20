@@ -22,6 +22,7 @@ const initialState = {
   // 0: None, 1: Ascending, 2: Descending
   currSortCol: { id: 0, sort: 0, colname: '' },
   data: [],
+  filterCol: { colname: '' },
 };
 
 function tableReducer(state, action) {
@@ -32,8 +33,12 @@ function tableReducer(state, action) {
       state.data = action.payload.data;
       break;
 
-    case 'sortcol':
+    case 'sort-column':
       state.currSortCol = action.payload;
+      break;
+
+    case 'filter-column':
+      state.filterCol = action.payload;
       break;
 
     default:
@@ -43,7 +48,7 @@ function tableReducer(state, action) {
 
 // Overall Component Wrapper
 const TableComponent = styled.div`
-  margin: 2rem;
+  margin: 1rem;
 `;
 
 // Table Styling
@@ -82,9 +87,95 @@ function SyncTable({ children, metadata, defColSortId, data }) {
 /**
  * Component to display and handle filtering
  */
+
+// ** TABLE FILTER **
+
+// Styled Components
+
+const TableFilter = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 1rem 1rem;
+  font-size: 1.8rem;
+`;
+
+const commonStyles = css`
+  padding: 1rem;
+  /* outline: none; */
+  border: none;
+  border-radius: 6px;
+  /* border: 1px solid var(--color-grey-3); */
+  outline: 1px solid var(--input-outline);
+  height: 3.6rem;
+  width: 20rem;
+  transition: outline 0.5s;
+
+  &:focus {
+    outline: 1px solid var(--input-outline-focus);
+  }
+
+  /* border: none;
+  background-color: #fdf2e9;
+  border-radius: 9px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); */
+`;
+
+const FilterInput = styled.input`
+  ${commonStyles}
+`;
+
+const FilterSelect = styled.select`
+  ${commonStyles}
+`;
+
+// Table Filter Component
 function Filter() {
   console.log('Render Filter:');
-  return <div>TableFilter</div>;
+
+  const { metadata } = useTableState();
+  const dispatch = useTableDispatch();
+
+  function handleOnSelect(e) {
+    dispatch({ type: 'filter-column', payload: { colname: e.target.value } });
+  }
+
+  return (
+    <TableFilter>
+      <FilterSelect
+        className='filter-column'
+        id='filter-column'
+        onChange={handleOnSelect}
+      >
+        <option
+          key='all'
+          value=''
+        >
+          All
+        </option>
+        {metadata.map((metaItem) =>
+          metaItem.filter ? (
+            <option
+              key={metaItem.colname}
+              value={metaItem.colname}
+            >
+              {metaItem.title}
+            </option>
+          ) : (
+            ''
+          ),
+        )}
+      </FilterSelect>
+      <span>
+        <FilterInput type='text' />
+        <span className='filter-icon'>
+          <ion-icon name='search-outline'></ion-icon>
+        </span>
+      </span>
+    </TableFilter>
+  );
 }
 
 // ** STYLED COMPONENTS **
@@ -168,12 +259,12 @@ function Data() {
   function handleColSort(e, item, currSortCol) {
     if (currSortCol.id !== item.id) {
       dispatch({
-        type: 'sortcol',
+        type: 'sort-column',
         payload: { id: item.id, colname: item.colname, sort: 1 },
       });
     } else {
       dispatch({
-        type: 'sortcol',
+        type: 'sort-column',
         payload: {
           id: currSortCol.id,
           colname: item.colname,

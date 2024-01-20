@@ -26,7 +26,7 @@ function SyncTableTest() {
       defColSortId={1}
       data={users}
     >
-      {/* <SyncTable.Filter /> */}
+      <SyncTable.Filter />
       <SyncTable.Data />
       {/* <SyncTable.Pagination /> */}
     </SyncTable>

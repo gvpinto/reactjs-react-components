@@ -24,6 +24,9 @@ const GlobalStyles = createGlobalStyle`
             --table-header-text-color: var(--color-white);
             --table-data-bg-odd-row-color: var(--color-grey-0);
             --table-data-bg-even-row-color: var(--color-grey-2);
+
+            --input-outline: var(--color-grey-3);
+            --input-outline-focus: var(--color-grey-6);
         }
 
     }

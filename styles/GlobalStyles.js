@@ -4,6 +4,10 @@ const GlobalStyles = createGlobalStyle`
 
     :root {
 
+        /* * {
+            outline: 1px solid red;
+        } */
+
         & {
             --color-white: #fff;
 
@@ -27,6 +31,8 @@ const GlobalStyles = createGlobalStyle`
 
             --input-outline: var(--color-grey-3);
             --input-outline-focus: var(--color-grey-6);
+
+            --search-icon-color: var(--color-grey-3)
         }
 
     }

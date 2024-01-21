@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useReducer } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useImmerReducer } from 'use-immer';
 import styled, { css } from 'styled-components';
 // import { FaAngleDown } from 'react-icons/fa';
@@ -8,6 +8,7 @@ import {
   HiMiniChevronUpDown,
   HiMiniChevronDown,
   HiMiniChevronUp,
+  HiMagnifyingGlass,
 } from 'react-icons/hi2';
 
 const SyncTableContext = createContext(null);
@@ -22,7 +23,7 @@ const initialState = {
   // 0: None, 1: Ascending, 2: Descending
   currSortCol: { id: 0, sort: 0, colname: '' },
   data: [],
-  filterCol: { colname: '' },
+  filter: { colname: '', value: '' },
 };
 
 function tableReducer(state, action) {
@@ -38,7 +39,11 @@ function tableReducer(state, action) {
       break;
 
     case 'filter-column':
-      state.filterCol = action.payload;
+      state.filter.colname = action.payload;
+      break;
+
+    case 'filter-value':
+      state.filter.value = action.payload;
       break;
 
     default:
@@ -60,7 +65,7 @@ const Table = styled.table`
 `;
 
 // TODO: Reduce size of the font for tablet and mobile devices
-// ** MAIN PARENT COMPONENT **
+// ******************** PARENT COMPONENT ********************
 function SyncTable({ children, metadata, defColSortId, data }) {
   const [state, dispatch] = useImmerReducer(tableReducer, initialState);
 
@@ -104,17 +109,20 @@ const TableFilter = styled.div`
 
 const commonStyles = css`
   padding: 1rem;
-  /* outline: none; */
+  outline: none;
   border: none;
   border-radius: 6px;
   /* border: 1px solid var(--color-grey-3); */
-  outline: 1px solid var(--input-outline);
+  /* outline: 1px solid var(--input-outline); */
+  box-shadow: 0 0 0 1px var(--input-outline);
   height: 3.6rem;
-  width: 20rem;
-  transition: outline 0.5s;
+  min-width: 20rem;
+  transition: box-shadow 0.3s ease-in;
+  font-size: inherit;
 
   &:focus {
-    outline: 1px solid var(--input-outline-focus);
+    /* outline: 1px solid var(--input-outline-focus); */
+    box-shadow: 0 0 0 1px var(--input-outline-focus);
   }
 
   /* border: none;
@@ -131,17 +139,39 @@ const FilterSelect = styled.select`
   ${commonStyles}
 `;
 
+const FilterIcon = styled.span`
+  position: absolute;
+  right: 1rem;
+  transform: translateY(25%);
+
+  & svg {
+    color: var(--search-icon-color);
+    height: 1.2em;
+    width: 1.2em;
+  }
+`;
+
 // Table Filter Component
 function Filter() {
   console.log('Render Filter:');
+  const { filter } = useTableState();
+
+  //   const [filterValue, setFilterValue] = useState('');
 
   const { metadata } = useTableState();
   const dispatch = useTableDispatch();
 
+  // Events
   function handleOnSelect(e) {
-    dispatch({ type: 'filter-column', payload: { colname: e.target.value } });
+    dispatch({ type: 'filter-column', payload: e.target.value });
   }
 
+  function handleOnChange(e) {
+    // setFilterValue(() => e.target.value);
+    dispatch({ type: 'filter-value', payload: e.target.value });
+  }
+
+  // Rendering
   return (
     <TableFilter>
       <FilterSelect
@@ -169,10 +199,14 @@ function Filter() {
         )}
       </FilterSelect>
       <span>
-        <FilterInput type='text' />
-        <span className='filter-icon'>
-          <ion-icon name='search-outline'></ion-icon>
-        </span>
+        <FilterInput
+          type='text'
+          value={filter.value}
+          onChange={handleOnChange}
+        />
+        <FilterIcon>
+          <HiMagnifyingGlass />
+        </FilterIcon>
       </span>
     </TableFilter>
   );
@@ -246,16 +280,16 @@ const TableCell = styled.td.attrs((props) => ({}))`
   padding: 1rem 1rem;
 `;
 
-// ** DATA COMPONENT **
+// ******************** DATA COMPONENT ********************
 
 function Data() {
   console.log('Render Data:');
-  const { metadata, currSortCol, data } = useTableState();
+  const { metadata, currSortCol, data, filter } = useTableState();
   const dispatch = useTableDispatch();
 
-  // ** EVENT HANDLERS **
+  // *** CREATE TABLE HEADER ***
 
-  // Handle the clicking of the sort Icon
+  // Event: Handle the clicking of the sort Icon
   function handleColSort(e, item, currSortCol) {
     if (currSortCol.id !== item.id) {
       dispatch({
@@ -330,8 +364,6 @@ function Data() {
     // }
   }
 
-  // ** CREATE TABLE HEADER **
-
   // Create table header
   const tableHeader = metadata.map((metaItem) => {
     return (
@@ -346,7 +378,7 @@ function Data() {
     );
   });
 
-  // ** CREATE TABLE BODY **
+  // *** CREATE TABLE BODY ***
   let tableBody;
 
   // Create sort function for sorting
@@ -372,6 +404,26 @@ function Data() {
     };
   }
 
+  function checkForMatch(obj, query) {
+    let match = false;
+    Object.values.forEach((value) => {
+      typeof value === 'string'
+        ? (match |= value.includes(query))
+        : typeof value === 'number'
+        ? (match |= value === query)
+        : (match |= false);
+    });
+    return match;
+  }
+
+  function filterItems(arr, colname, query) {
+    return arr.filter((obj) => {
+      if (!colname || colname === '')
+        return obj[colname].toLowerCase().includes(query.toLowerCase());
+      else return checkForMatch(obj, query);
+    });
+  }
+
   // Create the rows only if the data is present
   if (!data || data.length === 0) {
     tableBody = (
@@ -387,15 +439,20 @@ function Data() {
   } else {
     // Shallow Copy before sort
     // const sortedData = [...data];
-    const sortedData = Array.from(data);
+    // const dataCopy = Array.from(data);
+
+    // 1. Filter the data
+    const filteredData = filterItems(data, 'city', filter.value);
+
+    // 2. Sort the data
 
     // Only sort after the sort has been clicked
     if (!(currSortCol.id === 0 || currSortCol.name === '')) {
-      sortedData.sort(sortFn(currSortCol));
+      filteredData.sort(sortFn(currSortCol));
     }
 
     // Sort table data for the body
-    tableBody = sortedData.map((dataItem) => {
+    tableBody = filteredData.map((dataItem) => {
       return (
         <tr key={dataItem.id}>
           {metadata.map((metaItem) => (
@@ -424,7 +481,7 @@ function Data() {
   );
 }
 
-// ** PAGINATION **
+// ******************** PAGINATION ********************
 
 function Pagination() {
   console.log('Render Pagination:');

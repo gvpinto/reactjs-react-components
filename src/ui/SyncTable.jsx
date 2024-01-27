@@ -104,7 +104,7 @@ const TableFilter = styled.div`
   align-items: center;
   gap: 1rem;
   margin: 2rem 1rem 1rem;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
 `;
 
 const commonStyles = css`
@@ -115,7 +115,7 @@ const commonStyles = css`
   /* border: 1px solid var(--color-grey-3); */
   /* outline: 1px solid var(--input-outline); */
   box-shadow: 0 0 0 1px var(--input-outline);
-  height: 3.6rem;
+  height: 3.8rem;
   min-width: 20rem;
   transition: box-shadow 0.3s ease-in;
   font-size: inherit;
@@ -142,7 +142,7 @@ const FilterSelect = styled.select`
 const FilterIcon = styled.span`
   position: absolute;
   right: 1rem;
-  transform: translateY(25%);
+  transform: translateY(35%);
 
   & svg {
     color: var(--search-icon-color);
@@ -162,10 +162,12 @@ function Filter() {
   const dispatch = useTableDispatch();
 
   // Events
+  // Handle filter by column
   function handleOnSelect(e) {
     dispatch({ type: 'filter-column', payload: e.target.value });
   }
 
+  // Handle filter value change
   function handleOnChange(e) {
     // setFilterValue(() => e.target.value);
     dispatch({ type: 'filter-value', payload: e.target.value });
@@ -278,6 +280,10 @@ const TableCell = styled.td.attrs((props) => ({}))`
   text-overflow: ellipsis;
   text-align: ${(props) => props.$align};
   padding: 1rem 1rem;
+  &:hover {
+    overflow: visible;
+    white-space: unset;
+  }
 `;
 
 // ******************** DATA COMPONENT ********************
@@ -404,23 +410,38 @@ function Data() {
     };
   }
 
-  function checkForMatch(obj, query) {
+  // Filter: match across all filterable columns
+  function checkForMatchAll(obj, query) {
     let match = false;
-    Object.values.forEach((value) => {
-      typeof value === 'string'
-        ? (match |= value.includes(query))
-        : typeof value === 'number'
-        ? (match |= value === query)
-        : (match |= false);
+    Object.values(obj).forEach((value) => {
+      match |= checkForMatch(value, query);
     });
     return match;
   }
 
+  // Filter: match a single column
+  function checkForMatch(value, query) {
+    let match;
+    typeof value === 'string'
+      ? (match |= value.toLowerCase().includes(query.toLowerCase()))
+      : typeof value === 'number'
+      ? (match |= value === Number(query))
+      : (match |= false);
+    return match;
+  }
+
   function filterItems(arr, colname, query) {
+    console.log(
+      'Colname: ',
+      colname,
+      'Query: ',
+      query,
+      'Condition: ',
+      !colname || colname === '',
+    );
     return arr.filter((obj) => {
-      if (!colname || colname === '')
-        return obj[colname].toLowerCase().includes(query.toLowerCase());
-      else return checkForMatch(obj, query);
+      if (colname === '') return checkForMatchAll(obj, query);
+      else return checkForMatch(obj[colname], query);
     });
   }
 
@@ -442,17 +463,22 @@ function Data() {
     // const dataCopy = Array.from(data);
 
     // 1. Filter the data
-    const filteredData = filterItems(data, 'city', filter.value);
+    let displayData;
+    if (filter.value !== '' && filter.value) {
+      displayData = filterItems(data, filter.colname, filter.value);
+    } else {
+      displayData = Array.from(data);
+    }
 
     // 2. Sort the data
 
     // Only sort after the sort has been clicked
     if (!(currSortCol.id === 0 || currSortCol.name === '')) {
-      filteredData.sort(sortFn(currSortCol));
+      displayData.sort(sortFn(currSortCol));
     }
 
     // Sort table data for the body
-    tableBody = filteredData.map((dataItem) => {
+    tableBody = displayData.map((dataItem) => {
       return (
         <tr key={dataItem.id}>
           {metadata.map((metaItem) => (

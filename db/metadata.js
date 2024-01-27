@@ -1,3 +1,7 @@
+import { currency, dateFromString } from '../src/utils/formatting';
+
+// TODO: Implement formatting of cell values
+// TODO: Filter for dates doesn't work with date formatting
 export const metadata = [
   {
     id: 1,
@@ -44,7 +48,7 @@ export const metadata = [
     title: 'State',
     hAlign: 'left',
     dAlign: 'left',
-    width: '10%',
+    width: '14%',
     textColor: '#FFF',
     bgColor: '',
     sort: false,
@@ -57,7 +61,7 @@ export const metadata = [
     title: 'Zip Code',
     hAlign: 'left',
     dAlign: 'left',
-    width: '13%',
+    width: '8%',
     textColor: '#FFF',
     bgColor: '',
     sort: false,
@@ -70,7 +74,7 @@ export const metadata = [
     title: 'Age',
     hAlign: 'center',
     dAlign: 'center',
-    width: '7%',
+    width: '5%',
     textColor: '#FFF',
     bgColor: '',
     sort: true,
@@ -83,23 +87,24 @@ export const metadata = [
     title: 'Salary',
     hAlign: 'right',
     dAlign: 'right',
-    width: '10%',
+    width: '13%',
     textColor: '#FFF',
     bgColor: '',
     sort: true,
     filter: true,
-    formatFn: null,
+    formatFn: currency,
   },
   {
     id: 8,
     colname: 'hiredate',
     title: 'Hire Date',
-    hAlign: 'left',
-    dAlign: 'left',
+    hAlign: 'center',
+    dAlign: 'center',
     width: '15%',
     textColor: '#FFF',
     bgColor: '',
     sort: true,
     filter: true,
+    formatFn: dateFromString,
   },
 ];

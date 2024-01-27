@@ -486,7 +486,9 @@ function Data() {
               $align={metaItem.dAlign}
               key={metaItem.colname}
             >
-              {dataItem[metaItem.colname]}
+              {metaItem.formatFn
+                ? metaItem.formatFn(dataItem[metaItem.colname])
+                : dataItem[metaItem.colname]}
             </TableCell>
           ))}
         </tr>

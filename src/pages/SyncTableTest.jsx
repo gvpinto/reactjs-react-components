@@ -28,7 +28,7 @@ function SyncTableTest() {
     >
       <SyncTable.Filter />
       <SyncTable.Data />
-      {/* <SyncTable.Pagination /> */}
+      <SyncTable.Pagination />
     </SyncTable>
   );
 }

@@ -9,12 +9,15 @@ import {
   HiMiniChevronDown,
   HiMiniChevronUp,
   HiMagnifyingGlass,
+  HiOutlineChevronLeft,
+  HiOutlineChevronRight,
 } from 'react-icons/hi2';
 
+// *** CONTEXT DEFINITION ***
 const SyncTableContext = createContext(null);
 const SyncTableDispatchContext = createContext(null);
 
-// ** REDUCER **
+// *** Initial State ***
 
 // Initial State of the SyncTable
 const initialState = {
@@ -24,14 +27,56 @@ const initialState = {
   currSortCol: { id: 0, sort: 0, colname: '' },
   data: [],
   filter: { colname: '', value: '' },
+  pagination: {
+    totalRows: 0,
+    rowsPerPage: 10,
+    totalPages: 0,
+    spread: 1,
+    currentPage: 1,
+  },
 };
 
+function calcTotalPages(totalRows, rowsPerPage) {
+  return Math.floor(totalRows / rowsPerPage) + 1;
+}
+
+function calcSpread(totalPages) {
+  if (totalPages <= 5) return 1;
+  else if (totalPages > 5 && totalPages <= 15) return 2;
+  else return 3;
+}
+
+function pageShift(currentPage, totalPages, direction) {
+  console.log(
+    'currentPage: ',
+    currentPage,
+    'totalPages: ',
+    totalPages,
+    'direction: ',
+    direction,
+  );
+  const shiftVal = direction === 'next' ? 1 : -1;
+  if (
+    (direction === 'next' && currentPage === totalPages) ||
+    (direction === 'prev' && currentPage === 1)
+  )
+    return currentPage;
+  return currentPage + shiftVal;
+}
+
+// *** Reducer ***
 function tableReducer(state, action) {
   switch (action.type) {
     case 'init':
       state.metadata = action.payload.metadata;
       state.defColSortId = action.payload.defColSortId;
       state.data = action.payload.data;
+      state.pagination.totalRows = action.payload.data.length;
+      state.pagination.totalPages = calcTotalPages(
+        state.pagination.totalRows,
+        state.pagination.rowsPerPage,
+      );
+      state.pagination.spread = calcSpread(state.pagination.totalPages);
       break;
 
     case 'sort-column':
@@ -44,6 +89,36 @@ function tableReducer(state, action) {
 
     case 'filter-value':
       state.filter.value = action.payload;
+      break;
+
+    case 'rows-per-page':
+      state.pagination.rowsPerPage = action.payload;
+      state.pagination.totalPages = calcTotalPages(
+        state.pagination.totalRows,
+        state.pagination.rowsPerPage,
+      );
+      state.pagination.spread = calcSpread(state.pagination.totalPages);
+      state.pagination.currentPage = 1;
+      break;
+
+    case 'next-page':
+      state.pagination.currentPage = pageShift(
+        state.pagination.currentPage,
+        state.pagination.totalPages,
+        'next',
+      );
+      break;
+
+    case 'prev-page':
+      state.pagination.currentPage = pageShift(
+        state.pagination.currentPage,
+        state.pagination.totalPages,
+        'prev',
+      );
+      break;
+
+    case 'page-num':
+      state.pagination.currentPage = action.payload;
       break;
 
     default:
@@ -89,9 +164,7 @@ function SyncTable({ children, metadata, defColSortId, data }) {
   );
 }
 
-/**
- * Component to display and handle filtering
- */
+// ******************** TABLE FILTER ********************
 
 // ** TABLE FILTER **
 
@@ -120,7 +193,8 @@ const commonStyles = css`
   transition: box-shadow 0.3s ease-in;
   font-size: inherit;
 
-  &:focus {
+  &:focus,
+  &:hover {
     /* outline: 1px solid var(--input-outline-focus); */
     box-shadow: 0 0 0 1px var(--input-outline-focus);
   }
@@ -214,6 +288,8 @@ function Filter() {
   );
 }
 
+// ******************** DATA COMPONENT ********************
+
 // ** STYLED COMPONENTS **
 
 // Style header - th to dynamically assign style based on the metadata
@@ -286,11 +362,15 @@ const TableCell = styled.td.attrs((props) => ({}))`
   }
 `;
 
-// ******************** DATA COMPONENT ********************
-
 function Data() {
   console.log('Render Data:');
-  const { metadata, currSortCol, data, filter } = useTableState();
+  const {
+    metadata,
+    currSortCol,
+    data,
+    filter,
+    pagination: { totalPages, rowsPerPage, currentPage },
+  } = useTableState();
   const dispatch = useTableDispatch();
 
   // *** CREATE TABLE HEADER ***
@@ -431,14 +511,6 @@ function Data() {
   }
 
   function filterItems(arr, colname, query) {
-    console.log(
-      'Colname: ',
-      colname,
-      'Query: ',
-      query,
-      'Condition: ',
-      !colname || colname === '',
-    );
     return arr.filter((obj) => {
       if (colname === '') return checkForMatchAll(obj, query);
       else return checkForMatch(obj[colname], query);
@@ -477,6 +549,10 @@ function Data() {
       displayData.sort(sortFn(currSortCol));
     }
 
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    displayData = displayData.slice(start, end);
+
     // Sort table data for the body
     tableBody = displayData.map((dataItem) => {
       return (
@@ -511,9 +587,201 @@ function Data() {
 
 // ******************** PAGINATION ********************
 
+// *** STYLED COMPONENTS ***
+
+const TablePagination = styled.div`
+  width: 100%;
+  /* display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  align-items: center; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.8rem auto 1.4rem;
+  font-size: 1.8rem;
+  gap: 1rem;
+`;
+
+const RowsPerPage = styled.div`
+  flex: 0 1 35%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+`;
+
+const SelectRowsPerPage = styled.select`
+  display: inline-block;
+  padding: 0.8rem;
+  border: 1px solid var(--input-outline);
+  border-radius: 6px;
+
+  &:focus,
+  &:hover {
+    border: 1px solid var(--input-outline-focus);
+  }
+`;
+
+const PageNumbers = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex: 34%;
+`;
+
+const PageNumber = styled.a`
+  &:link,
+  &:visited {
+    text-decoration: none;
+    color: var(--pagination-bg-color);
+    display: inline-block;
+    display: flex;
+    width: 3.2rem;
+    height: 3.2rem;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    font-weight: 600;
+    ${(props) =>
+      props.$selected
+        ? css`
+            background-color: var(--pagination-bg-color);
+            color: #fff;
+          `
+        : ''};
+  }
+
+  &:hover,
+  &:active {
+    background-color: var(--pagination-bg-color);
+    color: #fff;
+  }
+`;
+
+const OtherSpacer = styled.div`
+  flex: 0 1 33%;
+`;
+
+const Arrow = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px solid var(--pagination-bg-color);
+  height: 3.2rem;
+  width: 3.2rem;
+  border-radius: 50%;
+  background-color: var(--pagination-active-color);
+  cursor: pointer;
+
+  & svg {
+    stroke: var(--pagination-bg-color);
+    stroke-width: 2px;
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+
+  ${(props) =>
+    !props.disabled
+      ? css`
+          &:hover {
+            background-color: var(--pagination-bg-color);
+          }
+          &:hover svg {
+            stroke: var(--pagination-active-color);
+          }
+        `
+      : css`
+          cursor: not-allowed;
+          border-color: var(--pagination-disabled-color);
+          & svg {
+            stroke: var(--pagination-disabled-color);
+          }
+        `}
+`;
+
+// *** Pagination ***
+
 function Pagination() {
   console.log('Render Pagination:');
-  return <div>Pagination</div>;
+  const {
+    metadata,
+    currSortCol,
+    data,
+    filter,
+    pagination: { totalPages, totalRows, currentPage },
+  } = useTableState();
+
+  const dispatch = useTableDispatch();
+
+  // Events
+  function handleOnChange(e) {
+    dispatch({ type: 'rows-per-page', payload: Number(e.target.value) });
+  }
+
+  function handleOnClickPrevPage(e) {
+    dispatch({ type: 'prev-page' });
+  }
+
+  function handleOnClickNextPage(e) {
+    dispatch({ type: 'next-page' });
+  }
+
+  function handleOnClickPageNum(e, pageNum) {
+    dispatch({ type: 'page-num', payload: Number(pageNum) });
+  }
+
+  const pageNums = [];
+
+  for (let i = 1; i <= totalPages; i++) {
+    pageNums.push(
+      <PageNumber
+        key={i}
+        href='#'
+        $selected={i === currentPage ? true : false}
+        onClick={(e) => handleOnClickPageNum(e, i)}
+      >
+        <span>{i}</span>
+      </PageNumber>,
+    );
+  }
+
+  return (
+    <TablePagination>
+      <RowsPerPage>
+        <span>Rows per page:</span>
+        <SelectRowsPerPage
+          name='rows-per-page'
+          id='rows-per-page'
+          onChange={handleOnChange}
+        >
+          <option value='10'>10</option>
+          <option value='25'>25</option>
+          <option value='50'>50</option>
+          <option value='100'>100</option>
+          <option value='0'>All</option>
+        </SelectRowsPerPage>
+      </RowsPerPage>
+      <PageNumbers>
+        <Arrow
+          onClick={handleOnClickPrevPage}
+          disabled={currentPage === 1}
+        >
+          <HiOutlineChevronLeft />
+        </Arrow>
+        {pageNums}
+        <Arrow
+          onClick={handleOnClickNextPage}
+          disabled={currentPage === totalPages}
+        >
+          <HiOutlineChevronRight />
+        </Arrow>
+      </PageNumbers>
+      <OtherSpacer>&nbsp;</OtherSpacer>
+    </TablePagination>
+  );
 }
 
 function useTableState() {

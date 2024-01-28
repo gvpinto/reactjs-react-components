@@ -24,7 +24,7 @@ const GlobalStyles = createGlobalStyle`
 
             --color-blue-8: #0a2d4e;
 
-            --table-header-bg-color: #0a2d4e;
+            --table-header-bg-color: var(--color-blue-8);
             --table-header-text-color: var(--color-white);
             --table-data-bg-odd-row-color: var(--color-grey-0);
             --table-data-bg-even-row-color: var(--color-grey-2);
@@ -32,7 +32,12 @@ const GlobalStyles = createGlobalStyle`
             --input-outline: var(--color-grey-3);
             --input-outline-focus: var(--color-grey-6);
 
-            --search-icon-color: var(--color-grey-3)
+            --search-icon-color: var(--color-grey-3);
+
+            --pagination-bg-color: var(--color-blue-8);
+
+            --pagination-disabled-color: var(--color-grey-5);
+            --pagination-active-color: var(--color-white);
         }
 
     }

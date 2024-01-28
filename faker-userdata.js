@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 // faker.seed(123);
 
 let users = [];
-const totalUsers = 20;
+const totalUsers = 55;
 
 for (let i = 0; i < totalUsers; i++) {
   const user = {
